@@ -9,9 +9,36 @@ import SwiftUI
 import CoreData
 
 struct Menu: View {
-    
     @Environment(\.managedObjectContext) private var viewContext
-    
+    @State private var searchText = ""
+
+    // MARK: - Sorting
+
+    func buildSortDescriptors() -> [NSSortDescriptor] {
+        return [
+            NSSortDescriptor(
+                key: "title",
+                ascending: true,
+                selector: #selector(NSString.localizedStandardCompare)
+            )
+        ]
+    }
+
+    // MARK: - Filtering
+
+    func buildPredicate() -> NSPredicate {
+        if searchText.isEmpty {
+            return NSPredicate(value: true)
+        } else {
+            return NSPredicate(
+                format: "title CONTAINS[cd] %@",
+                searchText
+            )
+        }
+    }
+
+    // MARK: - API
+
     func getMenuData() {
         PersistenceController.shared.clear()
 
@@ -41,14 +68,24 @@ struct Menu: View {
 
         task.resume()
     }
-    
+
+    // MARK: - View
+
     var body: some View {
         VStack {
             Text("Little Lemon")
             Text("Chicago")
-            Text("We are a family owned Mediterranean restaurant focused on traditional recipes served with a modern twist.")
 
-            FetchedObjects { (dishes: [Dish]) in
+            Text(
+                "We are a family owned Mediterranean restaurant focused on traditional recipes served with a modern twist."
+            )
+
+            TextField("Search menu", text: $searchText)
+
+            FetchedObjects(
+                predicate: buildPredicate(),
+                sortDescriptors: buildSortDescriptors()
+            ) { (dishes: [Dish]) in
                 List {
                     ForEach(dishes) { dish in
                         HStack {
@@ -59,7 +96,9 @@ struct Menu: View {
 
                             Spacer()
 
-                            AsyncImage(url: URL(string: dish.image ?? "")) { image in
+                            AsyncImage(
+                                url: URL(string: dish.image ?? "")
+                            ) { image in
                                 image
                                     .resizable()
                                     .scaledToFit()
@@ -80,4 +119,8 @@ struct Menu: View {
 
 #Preview {
     Menu()
+        .environment(
+            \.managedObjectContext,
+            PersistenceController.shared.container.viewContext
+        )
 }
