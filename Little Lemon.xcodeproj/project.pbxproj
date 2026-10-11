@@ -10,22 +10,9 @@
 		55607DDE307A90BF00E30312 /* Little Lemon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Little Lemon.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		558FB096307BB0B5006984D2 /* Exceptions for "Little Lemon" folder in "Little Lemon" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				ExampleDatabase.xcdatamodeld,
-			);
-			target = 55607DDD307A90BF00E30312 /* Little Lemon */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		55607DE0307A90BF00E30312 /* Little Lemon */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				558FB096307BB0B5006984D2 /* Exceptions for "Little Lemon" folder in "Little Lemon" target */,
-			);
 			path = "Little Lemon";
 			sourceTree = "<group>";
 		};
