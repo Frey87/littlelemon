@@ -1,36 +1,35 @@
-//
-//  Home.swift
-//  Little Lemon
-//
-//  Created by Valentyn Verovkin on 11.10.2026.
-//
-
 import SwiftUI
 import CoreData
 
 struct Home: View {
+    @Binding var isLoggedIn: Bool
+
+    @State private var showProfile = false
+
     let persistence = PersistenceController.shared
 
     var body: some View {
-        TabView {
-            Menu()
-                .environment(
-                    \.managedObjectContext,
-                    persistence.container.viewContext
-                )
-                .tabItem {
-                    Label("Menu", systemImage: "list.dash")
+        Menu {
+            showProfile = true
+        }
+        .environment(
+            \.managedObjectContext,
+            persistence.container.viewContext
+        )
+        .navigationDestination(isPresented: $showProfile) {
+            UserProfile(
+                isLoggedIn: $isLoggedIn,
+                onBack: {
+                    showProfile = false
                 }
-
-            UserProfile()
-                .tabItem {
-                    Label("Profile", systemImage: "square.and.pencil")
-                }
+            )
         }
         .navigationBarBackButtonHidden(true)
     }
 }
 
 #Preview {
-    Home()
+    NavigationStack {
+        Home(isLoggedIn: .constant(true))
+    }
 }
